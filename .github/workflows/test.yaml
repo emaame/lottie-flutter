@@ -12,9 +12,8 @@ jobs:
       matrix:
         flutter: ['stable', 'dev']
     runs-on: ubuntu-latest
+    container:
+      image: docker://cirrusci/flutter:stable
     steps:
       - uses: actions/checkout@v2
-      - name: Run tests
-        uses: docker://cirrusci/flutter:stable
-        with:
-          entrypoint: run_tests.sh
+      - run: run_tests.sh
