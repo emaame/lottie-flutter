@@ -17,4 +17,4 @@ jobs:
       - name: Run tests
         uses: docker://cirrusci/flutter:stable
         with:
-          entrypoint: sh update_goldens.sh
+          entrypoint: update_goldens.sh
