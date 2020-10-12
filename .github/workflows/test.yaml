@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: run_tests.sh
       - name: Run tests
         uses: docker://cirrusci/flutter:stable
         with:
