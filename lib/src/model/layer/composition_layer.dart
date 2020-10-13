@@ -74,6 +74,46 @@ class CompositionLayer extends BaseLayer {
     }
   }
 
+  BlendMode _getBlendMode(BlendMode parentBlendMode) {
+    if (parentBlendMode != BlendMode.srcOver) return parentBlendMode;
+    // https://github.com/airbnb/lottie-web/wiki/Blend-Modes
+    // TODO Testing BlendModes other than BlendMode.screen.
+    switch (layerModel.bm) {
+      case 1:
+        return BlendMode.multiply;
+      case 2:
+        return BlendMode.screen;
+      case 3:
+        return BlendMode.overlay;
+      case 4:
+        return BlendMode.darken;
+      case 5:
+        return BlendMode.lighten;
+      case 6:
+        return BlendMode.colorDodge;
+      case 7:
+        return BlendMode.colorBurn;
+      case 8:
+        return BlendMode.hardLight;
+      case 9:
+        return BlendMode.softLight;
+      case 10:
+        return BlendMode.difference;
+      case 11:
+        return BlendMode.exclusion;
+      case 12:
+        return BlendMode.hue;
+      case 13:
+        return BlendMode.saturation;
+      case 14:
+        return BlendMode.color;
+      case 15:
+        return BlendMode.luminosity;
+      default:
+        return parentBlendMode;
+    }
+  }
+
   @override
   void drawLayer(Canvas canvas, Size size, Matrix4 parentMatrix,
       {int parentAlpha, BlendMode parentBlendMode}) {
@@ -95,17 +135,15 @@ class CompositionLayer extends BaseLayer {
     }
 
     var childAlpha = isDrawingWithOffScreen ? 255 : parentAlpha;
-    final childBlendMode = parentBlendMode != BlendMode.srcOver
-        ? parentBlendMode
-        : layerModel.bm == 0
-            ? BlendMode.srcOver
-            : BlendMode.screen;
+    final childBlendMode = _getBlendMode(parentBlendMode);
     for (var i = _layers.length - 1; i >= 0; i--) {
       if (!newClipRect.isEmpty) {
         canvas.clipRect(newClipRect);
       }
 
       var layer = _layers[i];
+      // A parent composition and child layers also have bm property,
+      // but child's bm was set as 0, so it is necessary to tell BlendMode to children.
       layer.draw(canvas, size, parentMatrix,
           parentAlpha: childAlpha, parentBlendMode: childBlendMode);
     }
