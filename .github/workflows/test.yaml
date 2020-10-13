@@ -17,4 +17,4 @@ jobs:
       - name: Run tests
         uses: docker://cirrusci/flutter:stable
         with:
-          entrypoint: run_tests.sh
+          args: sh run_tests.sh
