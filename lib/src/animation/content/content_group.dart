@@ -145,7 +145,7 @@ class ContentGroup implements DrawingContent, PathContent, KeyPathElement {
 
   @override
   void draw(Canvas canvas, Size size, Matrix4 parentMatrix,
-      {@required int parentAlpha}) {
+      {@required int parentAlpha, @required BlendMode parentBlendMode}) {
     if (_hidden) {
       return;
     }
@@ -162,13 +162,14 @@ class ContentGroup implements DrawingContent, PathContent, KeyPathElement {
     }
 
     // Apply off-screen rendering only when needed in order to improve rendering performance.
-    var isRenderingWithOffScreen =
+    var isRenderingWithOffScreen = parentBlendMode != BlendMode.srcOver ||
         _lottieDrawable.isApplyingOpacityToLayersEnabled &&
             hasTwoOrMoreDrawableContent() &&
             layerAlpha != 255;
     if (isRenderingWithOffScreen) {
       var offScreenRect = getBounds(_matrix, applyParents: true);
       _offScreenPaint.setAlpha(layerAlpha);
+      _offScreenPaint.blendMode = parentBlendMode;
       canvas.saveLayer(offScreenRect, _offScreenPaint);
     }
 
@@ -176,7 +177,8 @@ class ContentGroup implements DrawingContent, PathContent, KeyPathElement {
     for (var i = _contents.length - 1; i >= 0; i--) {
       Object content = _contents[i];
       if (content is DrawingContent) {
-        content.draw(canvas, size, _matrix, parentAlpha: childAlpha);
+        content.draw(canvas, size, _matrix,
+            parentAlpha: childAlpha, parentBlendMode: parentBlendMode);
       }
     }
 

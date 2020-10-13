@@ -157,7 +157,8 @@ class LottieDrawable {
     _matrix.setIdentity();
     _matrix.scale(destinationRect.size.width / sourceRect.width,
         destinationRect.size.height / sourceRect.height);
-    _compositionLayer.draw(canvas, rect.size, _matrix, parentAlpha: 255);
+    _compositionLayer.draw(canvas, rect.size, _matrix,
+        parentAlpha: 255, parentBlendMode: BlendMode.srcOver);
     canvas.restore();
   }
 }

@@ -79,7 +79,8 @@ class GradientFillContent implements DrawingContent, KeyPathElementContent {
   }
 
   @override
-  void draw(Canvas canvas, Size size, Matrix4 parentMatrix, {int parentAlpha}) {
+  void draw(Canvas canvas, Size size, Matrix4 parentMatrix,
+      {int parentAlpha, BlendMode parentBlendMode}) {
     if (_fill.hidden) {
       return;
     }
@@ -101,6 +102,7 @@ class GradientFillContent implements DrawingContent, KeyPathElementContent {
     if (_colorFilterAnimation != null) {
       _paint.colorFilter = _colorFilterAnimation.value;
     }
+    _paint.blendMode = parentBlendMode;
 
     var alpha =
         ((parentAlpha / 255.0 * _opacityAnimation.value / 100.0) * 255).round();

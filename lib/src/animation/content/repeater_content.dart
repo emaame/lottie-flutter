@@ -104,7 +104,8 @@ class RepeaterContent
   }
 
   @override
-  void draw(Canvas canvas, Size size, Matrix4 parentMatrix, {int parentAlpha}) {
+  void draw(Canvas canvas, Size size, Matrix4 parentMatrix,
+      {int parentAlpha, BlendMode parentBlendMode}) {
     var copies = _copies.value;
     var offset = _offset.value;
     var startOpacity = _transform.startOpacity.value / 100.0;
@@ -114,7 +115,8 @@ class RepeaterContent
       _matrix.preConcat(_transform.getMatrixForRepeater(i + offset));
       var newAlpha =
           parentAlpha * lerpDouble(startOpacity, endOpacity, i / copies);
-      _contentGroup.draw(canvas, size, _matrix, parentAlpha: newAlpha.round());
+      _contentGroup.draw(canvas, size, _matrix,
+          parentAlpha: newAlpha.round(), parentBlendMode: parentBlendMode);
     }
   }
 

@@ -35,6 +35,7 @@ class Layer {
   final MatteType matteType;
   final AnimatableDoubleValue /*?*/ timeRemapping;
   final bool isHidden;
+  final int bm;
 
   double get startProgress {
     return startFrame / composition.durationFrames;
@@ -63,6 +64,7 @@ class Layer {
     this.matteType,
     this.timeRemapping,
     this.isHidden,
+    this.bm,
   });
 
   @override

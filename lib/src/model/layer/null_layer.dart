@@ -10,7 +10,7 @@ class NullLayer extends BaseLayer {
 
   @override
   void drawLayer(Canvas canvas, Size size, Matrix4 parentMatrix,
-      {int parentAlpha}) {
+      {int parentAlpha, BlendMode parentBlendMode}) {
     // Do nothing.
   }
 

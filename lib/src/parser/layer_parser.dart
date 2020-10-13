@@ -42,7 +42,8 @@ class LayerParser {
     'op', // 19
     'tm', // 20
     'cl', // 21
-    'hd' // 22
+    'hd', // 22
+    'bm' // 23
   ]);
 
   static Layer parse(LottieComposition composition) {
@@ -69,7 +70,8 @@ class LayerParser {
         inOutKeyframes: <Keyframe<double>>[],
         matteType: MatteType.none,
         timeRemapping: null,
-        isHidden: false);
+        isHidden: false,
+        bm: 0);
   }
 
   static final JsonReaderOptions _textNames = JsonReaderOptions.of(['d', 'a']);
@@ -95,6 +97,7 @@ class LayerParser {
     var outFrame = 0.0;
     String cl;
     var hidden = false;
+    var bm = 0;
 
     var matteType = MatteType.none;
     AnimatableTransform transform;
@@ -240,6 +243,9 @@ class LayerParser {
         case 22:
           hidden = reader.nextBoolean();
           break;
+        case 23:
+          bm = reader.nextInt();
+          break;
         default:
           reader.skipName();
           reader.skipValue();
@@ -310,6 +316,7 @@ class LayerParser {
         inOutKeyframes: inOutKeyframes,
         matteType: matteType,
         timeRemapping: timeRemapping,
-        isHidden: hidden);
+        isHidden: hidden,
+        bm: bm);
   }
 }

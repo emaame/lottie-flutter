@@ -23,8 +23,9 @@ class ShapeLayer extends BaseLayer {
 
   @override
   void drawLayer(Canvas canvas, Size size, Matrix4 parentMatrix,
-      {@required int parentAlpha}) {
-    _contentGroup.draw(canvas, size, parentMatrix, parentAlpha: parentAlpha);
+      {@required int parentAlpha, BlendMode parentBlendMode}) {
+    _contentGroup.draw(canvas, size, parentMatrix,
+        parentAlpha: parentAlpha, parentBlendMode: parentBlendMode);
   }
 
   @override

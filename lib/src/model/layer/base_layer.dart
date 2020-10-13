@@ -168,7 +168,7 @@ abstract class BaseLayer implements DrawingContent, KeyPathElement {
 
   @override
   void draw(Canvas canvas, Size canvasSize, Matrix4 parentMatrix,
-      {@required int parentAlpha}) {
+      {@required int parentAlpha, @required BlendMode parentBlendMode}) {
     L.beginSection(_drawTraceName);
     if (!_visible || layerModel.isHidden) {
       L.endSection(_drawTraceName);
@@ -187,7 +187,8 @@ abstract class BaseLayer implements DrawingContent, KeyPathElement {
     if (!hasMatteOnThisLayer() && !hasMasksOnThisLayer()) {
       _matrix.preConcat(transform.getMatrix());
       L.beginSection('Layer#drawLayer');
-      drawLayer(canvas, canvasSize, _matrix, parentAlpha: alpha);
+      drawLayer(canvas, canvasSize, _matrix,
+          parentAlpha: alpha, parentBlendMode: parentBlendMode);
       L.endSection('Layer#drawLayer');
       _recordRenderTime(L.endSection(_drawTraceName));
       return;
@@ -225,7 +226,8 @@ abstract class BaseLayer implements DrawingContent, KeyPathElement {
       // Clear the off screen buffer. This is necessary for some phones.
       _clearCanvas(canvas, bounds);
       L.beginSection('Layer#drawLayer');
-      drawLayer(canvas, canvasSize, _matrix, parentAlpha: alpha);
+      drawLayer(canvas, canvasSize, _matrix,
+          parentAlpha: alpha, parentBlendMode: parentBlendMode);
       L.endSection('Layer#drawLayer');
 
       if (hasMasksOnThisLayer()) {
@@ -238,7 +240,8 @@ abstract class BaseLayer implements DrawingContent, KeyPathElement {
         canvas.saveLayer(bounds, _mattePaint);
         L.endSection('Layer#saveLayer');
         _clearCanvas(canvas, bounds);
-        _matteLayer.draw(canvas, canvasSize, parentMatrix, parentAlpha: alpha);
+        _matteLayer.draw(canvas, canvasSize, parentMatrix,
+            parentAlpha: alpha, parentBlendMode: parentBlendMode);
         L.beginSection('Layer#restoreLayer');
         canvas.restore();
         L.endSection('Layer#restoreLayer');
@@ -338,7 +341,7 @@ abstract class BaseLayer implements DrawingContent, KeyPathElement {
   }
 
   void drawLayer(Canvas canvas, Size size, Matrix4 parentMatrix,
-      {@required int parentAlpha});
+      {@required int parentAlpha, @required BlendMode parentBlendMode});
 
   void _applyMasks(Canvas canvas, Rect bounds, Matrix4 matrix) {
     L.beginSection('Layer#saveLayer');

@@ -90,7 +90,7 @@ class TextLayer extends BaseLayer {
 
   @override
   void drawLayer(Canvas canvas, Size size, Matrix4 parentMatrix,
-      {int parentAlpha}) {
+      {int parentAlpha, BlendMode parentBlendMode}) {
     canvas.save();
     if (!lottieDrawable.useTextGlyphs) {
       canvas.transform(parentMatrix.storage);
@@ -102,6 +102,9 @@ class TextLayer extends BaseLayer {
       canvas.restore();
       return;
     }
+
+    _fillPaint.blendMode = parentBlendMode;
+    _strokePaint.blendMode = parentBlendMode;
 
     Color fillPaintColor;
     if (_colorCallbackAnimation != null) {

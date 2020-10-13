@@ -76,14 +76,14 @@ class CompositionLayer extends BaseLayer {
 
   @override
   void drawLayer(Canvas canvas, Size size, Matrix4 parentMatrix,
-      {int parentAlpha}) {
+      {int parentAlpha, BlendMode parentBlendMode}) {
     L.beginSection('CompositionLayer#draw');
     var newClipRect = Rect.fromLTWH(0, 0, layerModel.preCompWidth.toDouble(),
         layerModel.preCompHeight.toDouble());
     newClipRect = parentMatrix.mapRect(newClipRect);
 
     // Apply off-screen rendering only when needed in order to improve rendering performance.
-    var isDrawingWithOffScreen =
+    var isDrawingWithOffScreen = parentBlendMode != BlendMode.srcOver ||
         lottieDrawable.isApplyingOpacityToLayersEnabled &&
             _layers.length > 1 &&
             parentAlpha != 255;
@@ -95,13 +95,19 @@ class CompositionLayer extends BaseLayer {
     }
 
     var childAlpha = isDrawingWithOffScreen ? 255 : parentAlpha;
+    final childBlendMode = parentBlendMode != BlendMode.srcOver
+        ? parentBlendMode
+        : layerModel.bm == 0
+            ? BlendMode.srcOver
+            : BlendMode.screen;
     for (var i = _layers.length - 1; i >= 0; i--) {
       if (!newClipRect.isEmpty) {
         canvas.clipRect(newClipRect);
       }
 
       var layer = _layers[i];
-      layer.draw(canvas, size, parentMatrix, parentAlpha: childAlpha);
+      layer.draw(canvas, size, parentMatrix,
+          parentAlpha: childAlpha, parentBlendMode: childBlendMode);
     }
     canvas.restore();
     L.endSection('CompositionLayer#draw');

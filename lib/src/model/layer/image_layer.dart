@@ -18,7 +18,7 @@ class ImageLayer extends BaseLayer {
 
   @override
   void drawLayer(Canvas canvas, Size size, Matrix4 parentMatrix,
-      {int parentAlpha}) {
+      {int parentAlpha, BlendMode parentBlendMode}) {
     var bitmap = getBitmap();
     if (bitmap == null) {
       return;
@@ -26,6 +26,8 @@ class ImageLayer extends BaseLayer {
     var density = window.devicePixelRatio;
 
     paint.setAlpha(parentAlpha);
+    paint.blendMode = parentBlendMode;
+
     if (_colorFilterAnimation != null) {
       paint.colorFilter = _colorFilterAnimation.value;
     }

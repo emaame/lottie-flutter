@@ -119,7 +119,8 @@ abstract class BaseStrokeContent
   }
 
   @override
-  void draw(Canvas canvas, Size size, Matrix4 parentMatrix, {int parentAlpha}) {
+  void draw(Canvas canvas, Size size, Matrix4 parentMatrix,
+      {int parentAlpha, BlendMode parentBlendMode}) {
     L.beginSection('StrokeContent#draw');
     if (parentMatrix.hasZeroScaleAxis) {
       L.endSection('StrokeContent#draw');
@@ -138,6 +139,7 @@ abstract class BaseStrokeContent
     if (_colorFilterAnimation != null) {
       paint.colorFilter = _colorFilterAnimation.value;
     }
+    paint.blendMode = parentBlendMode;
 
     for (var i = 0; i < _pathGroups.length; i++) {
       var pathGroup = _pathGroups[i];

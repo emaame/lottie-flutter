@@ -22,7 +22,7 @@ class SolidLayer extends BaseLayer {
 
   @override
   void drawLayer(Canvas canvas, Size size, Matrix4 parentMatrix,
-      {int parentAlpha}) {
+      {int parentAlpha, BlendMode parentBlendMode}) {
     var backgroundAlpha = layerModel.solidColor.alpha;
     if (backgroundAlpha == 0) {
       return;
@@ -35,6 +35,8 @@ class SolidLayer extends BaseLayer {
             255.0)
         .round();
     paint.setAlpha(alpha);
+    paint.blendMode = parentBlendMode;
+
     if (_colorFilterAnimation != null) {
       paint.colorFilter = _colorFilterAnimation.value;
     }
